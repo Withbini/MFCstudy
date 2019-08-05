@@ -3,6 +3,8 @@
 GUI 부분을 보충하기 위해 MFC 공부 시작하였습니다.
 
 자료는
-https://yyman.tistory.com/
-참고합니다.
+https://yyman.tistory.com/ 참고했습니다.
+
+개발환경 : windows 7 , Visual Studio 2013
+
 2019/08/05~
