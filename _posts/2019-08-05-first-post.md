@@ -1,5 +1,5 @@
-initCudaResources 함수부터 다시 분석
-initCudaResources 
+#initCudaResources 함수부터 다시 분석
+##initCudaResources 
 cuDeviceComputeCapability
 GPU 스펙 알려주는 함수
 CUmoduleManager
