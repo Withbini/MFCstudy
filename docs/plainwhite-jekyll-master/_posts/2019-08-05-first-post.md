@@ -323,4 +323,4 @@ MFC는 먼저 소스파일과 리소스파일로 구성된다.
 ### 리소스뷰 분석
 리소스뷰에서 관련된 항목들부터 분석해보자
 
-![resourceview](./img/resourceview.jpg)
+![resourceview](withbini.github.io/img/resourceview.jpg)
