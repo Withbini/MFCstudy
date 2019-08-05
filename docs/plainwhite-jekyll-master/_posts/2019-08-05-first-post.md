@@ -321,6 +321,16 @@ MFC는 먼저 소스파일과 리소스파일로 구성된다.
 리소스파일은 응용 프로그램에서 사용하는 메뉴, 대화 상자, 아이콘, 비트맵, 단축키 정보 등 소스 코드 이외의 데이터를 의미한다.[LINK]https://thebook.io/006796/ch02/02/03_01/
 
 ### 리소스뷰 분석
-리소스뷰에서 관련된 항목들부터 분석해보자
+리소스뷰에서 관련된 항목들부터 보자
 
-![resourceview](withbini.github.io/img/resourceview.jpg)
+![resourceview](./img/resourceview.jpg)
+
+| 'Accelerator' | 단축키 지정 관리 |
+| 'Dialog' | 다이얼로그 창 관리 |
+| 'Icon' | 아이콘 관리 |
+| 'Menu' | 작업 메뉴 |
+| String Table | 문자열 관리 테이블 |
+|Toolbar| 툴바 |
+|Version| 버전 |
+
+위와 같이 있다. 위의 리소스들이 무엇을 의미하는지, 앞으로 어떻게 대화상자 등을 만들 수 있는지는 내일 
