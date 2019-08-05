@@ -6,9 +6,9 @@ initCudaResources 함수부터 다시 분석
 ===================================
 initCudaResources
 -------------------
-# cuDeviceComputeCapability
+### cuDeviceComputeCapability
 GPU 스펙 알려주는 함수
-# CUmoduleManager
+### CUmoduleManager
 ptx 파일에서 CUDA 커널함수 갯수, 글로벌 메모리, texture reference array를 받아오는 함수=>정확한건 물어봐야할듯
 # initCudaVideo
 실제로 비디오 데이터가 들어오는 함수
