@@ -182,16 +182,145 @@ p_c가 derived를 가리키는 Base객체이므로 base에 있는 what()함수�
 **이를 다형성(polymorphism)이라고 한다**
 polymorphism-하나의 메소드 호출이지만 각자 다른 역할을 한다는 의미
 
-AFX 공부
+~~AFX 공부
 ==========================
 이제 virtual도 공부했으니, Afx로 들어가자
 
-MFC는 일반적인 라이브러리와 달리 프레임워크 기반의 라이브러리이다.
+~~MFC는 일반적인 라이브러리와 달리 프레임워크 기반의 라이브러리이다.
 MFC는 윈도우즈 어플리케이션으로 처리해야 할 대부분의 논리를 MFC 내부적(AfxWinMain 부터 시작)으로 구현해 두고 있다. 하지만, MFC는 파일 구조상 실행 파일이 아니라 DLL이기 때문에 단독으로 실행될 수 없다. 따라서 반드시 한번은 실행 어플리케이션에 의해 호출되어야만 프레임웍으로 동작을 시작할 수 있는 것이다. 그래서 숨겨진 WinMain()를 통해 개발자가 다른 실행 흐름을 선택할 수 없도록 막아 버리면서 AfxWinMain()가 강제적으로 호출되도록 유도하기 위하여 이런 구조를 사용하는 것이다. 만약, WinMain()가 어플리케이션 코드에 노출되어 있다면 개발자가 직접 WinMain을 다르게 구현할 수 도 있을 것이다. 그렇게 되면 MFC 내부의 AfxWinMain()가 호출될 수 없으므로 MFC 프레임웍이 시작될 수 없게된다.
 
-출처: https://petra.tistory.com/1296 [Free, Freedom]
+~~출처: https://petra.tistory.com/1296 [Free, Freedom]
 
-### 내 언어로 정리해보자
+~~### 내 언어로 정리해보자
 MFC는 윈도우즈 어플리케이션 처리부분을 MFC 내부적으로 처리한다.
 이 때 MFC가 dll이 파일이므로 혼자서 실행될 수 없고, 실행 어플리케이션에 의해 호출되어야 한다.
-Afxwinmain으로 다른 실행을 할 수 없게 강제적으로 호출되도록 한다.
+Afxwinmain으로 다른 실행을 할 수 없게 강제적으로 호출되도록 한다.~~
+
+위 블로그는 내가 이해하기에 너무 어려워서 패스
+
+
+win32 이해하기 & MFC 도입배경
+===========
+###windows 프로그램 이해하기
+
+windows 프로그램은 windows main과 windows procedure로 나뉘어 다음과 같은 구조를 가진다.
+
+~~~C++
+WinMain( )
+{
+       윈도우 클래스 만들기
+       윈도우 객체 생성하기
+       윈도우 객체 화면에 띄우기
+       메시지 루프 돌리기
+}
+
+
+WndProc( )
+{
+       전달된 메시지 처리하기
+}
+~~~~
+
+윈도우 메인에서는 윈도우 객체를 만들고 메시지 루프를 돌린다.
+그리고 메시지가 들어올 때마다 각 응용프로그램의 메시지 큐(어플리케이션 큐)에 해당 내용을 전달한다.
+그러면 윈도우 프로시저가 해당 메시지에 대한 내용을 처리한다.
+
+다음은 하얀 윈도우 바탕 응용프로그램이다.
+~~~C++
+#include <Windows.h>
+#include <tchar.h>
+
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+LPTSTR lpszClass = _T("BasicApi");
+
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
+{
+	HWND hWnd;
+	MSG Message;
+	WNDCLASS WndClass;
+
+
+	WndClass.cbClsExtra = 0;
+	WndClass.cbWndExtra = 0;
+	WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	WndClass.hInstance = hInstance;
+	WndClass.lpfnWndProc = (WNDPROC)WndProc;
+	WndClass.lpszClassName = lpszClass;
+	WndClass.lpszMenuName = NULL;
+	WndClass.style = CS_HREDRAW | CS_VREDRAW;
+	RegisterClass(&WndClass);
+
+
+	//윈도우 객체 생성
+	hWnd = CreateWindow(lpszClass, LPTSTR(_T("win32")), WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, (HMENU)NULL, hInstance, NULL);
+	ShowWindow(hWnd, nCmdShow);
+
+	//메시지
+	while (GetMessage(&Message, 0, 0, 0))
+	{
+		TranslateMessage(&Message); //문자입력 처리함수
+		DispatchMessage(&Message); //GetMessage함수로부터 전달된 메시지를 winproc에 보내는 역할
+	}
+
+	return Message.wParam;
+
+}
+
+
+//hwnd 메시지 받을 윈도우 핸들
+//iMessage 전달된 메시지
+//wParam,lParam iMessage에 따른 부가정보 
+LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	int nReturn;
+	//메시지 형태에 따라 이벤트 다르게 해야하므로 switch문
+	switch (iMessage)
+	{
+	case WM_CREATE:
+		return 0;
+
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		EndPaint(hWnd, &ps);
+		return 0;
+
+	case WM_CLOSE:
+
+		nReturn = MessageBox(hWnd, _T("정말 종료하시겠습니까?"), _T("확인"), MB_YESNO);
+		if (nReturn == IDYES)
+			DestroyWindow(hWnd);
+		return 0;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+
+	}
+	//case문에서 처리되지 않은 메시지는 DefWindowProc로 가 메시지 처리
+	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
+
+}
+~~~
+
+문제는 위와 같이 윈도우 관련 API들이 한두가지가 아니라는 것이다.
+그렇다보니, MS에서 관련 API끼리 모아 클래스를 만들었고 그것이 Microsoft Foundation Class(MFC)이다.
+물론 현재에는 지원을 중단한 것 같고, 이후 Video decoder 코드도 시간여유가 된다면 .NET으로 갈아탈 예정이다.
+
+
+MFC
+======
+MFC는 먼저 소스파일과 리소스파일로 구성된다.
+소스파일은 .obj로 컴파일 되고, 리소스파일은 .rc로 컴파일되어서
+이들이 링크되어서 하나의 Excution file이 된다.
+
+리소스파일은 응용 프로그램에서 사용하는 메뉴, 대화 상자, 아이콘, 비트맵, 단축키 정보 등 소스 코드 이외의 데이터를 의미한다.[LINK]https://thebook.io/006796/ch02/02/03_01/
+
+### 리소스뷰 분석
+리소스뷰에서 관련된 항목들부터 분석해보자
+
+![resourceview](./img/resourceview.jpg)
