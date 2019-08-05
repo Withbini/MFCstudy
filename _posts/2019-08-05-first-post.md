@@ -1,3 +1,8 @@
+---
+title: "Cuda video decoder 완료"
+date: 2019-08-05 18:26:28 -0400
+categories: jekyll update
+---
 #initCudaResources 함수부터 다시 분석
 ##initCudaResources 
 cuDeviceComputeCapability
